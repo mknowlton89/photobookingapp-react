@@ -46,7 +46,7 @@ export function CalendarComponent() {
         if (userId) {
             API.getDashboardData(userId)
                 .then(res => {
-                    // console.log(res.data)
+                    console.log(res.data)
                     let rawStartTime = res.data[0].startTime;
                     // console.log(rawStartTime);
                     let formattedStartTime = dayjs(rawStartTime).format('MM/DD/YYYY')
@@ -55,28 +55,39 @@ export function CalendarComponent() {
                     let formattedHourMinute = dayjs(rawStartTime).format('hh:mm A')
                     // console.log(formattedHourMinute);
 
-                    console.log(`${formattedStartTime} ${formattedHourMinute}`)
+                    // console.log(`${formattedStartTime} ${formattedHourMinute}`)
                     let formattedRes = res.data.map(appointment => {
                         if (appointment.status === 'active') {
-                            console.log(appointment)
-                            const startTime = dayjs(appointment.startTime).format('YYYY/MM/DD hh:mm A')
-                            const endTime = dayjs(appointment.endTime).format('YYYY/MM/DD hh:mm A')
-                            console.log(startTime);
-                            console.log(endTime);
-                            // let formattedStartDate = dayjs(appointment.startTime).format('YYYY/DD/MM');
-                            // console.log(formattedStartDate)
-                            // let formattedHour = dayjs(appointment.startTime).format('hh:mm A');
-                            // console.log(formattedHour)
+                            // Parse the appointment.date to get the following;
+                            const dateArray = appointment.date.split("-")
+                            const year = dateArray[0];
+                            const month = dateArray[1] - 1;
+                            const day = dateArray[2];
+                            const startTimeArray = appointment.startTime.split(':');
+                            console.log(startTimeArray[0]);
+                            const endTimeArray = appointment.endTime.split(':');
+                            let startDateTime = new Date(year, month, day);
 
-                            // let startTime = `${formattedStartDate} ${formattedHour}`
-                            // console.log(startTime)
-                            //         const splitDate = appointment.date.split('-')
-                            //         const splitStartTime = appointment.startTime.split(":");
-                            //         const splitEndTime = appointment.endTime.split(":");
+                            startDateTime.setHours(startTimeArray[0])
+                            startDateTime.setMinutes(startTimeArray[1]);
+
+                            let endDateTime = new Date(year, month, day);
+                            endDateTime.setHours(endTimeArray[0])
+                            endDateTime.setMinutes(endTimeArray[1]);
+                            // .setMinutes(startTimeArray[1]);
+                            // const endDateTime = date.setHours(endTimeArray[0]).setMinutes(endTimeArray[1]);
+
+                            // console.log(date);
+                            console.log(endDateTime);
+                            console.log(startDateTime);
+                            let startTime = appointment.startTime;
+                            let endTime = appointment.endTime;
+                            // I need to get the date, the startTime, and the endTime
+                            // I need to create startDateTime and endDateTime and pass those in to the field below.
                             return {
                                 Subject: appointment.package,
-                                EndTime: endTime,
-                                StartTime: startTime,
+                                EndTime: endDateTime,
+                                StartTime: startDateTime,
                                 Location: `${appointment.street} ${appointment.city} ${appointment.state} ${appointment.zip}`,
                                 Description: `Client Name: ${appointment.firstName} ${appointment.lastName}| Client Email: ${appointment.email}`,
                                 Id: `${appointment._id}`
@@ -84,7 +95,7 @@ export function CalendarComponent() {
                         }
                     })
                     formattedRes = formattedRes.filter(x => x !== undefined);
-                    console.log(formattedRes)
+                    // console.log(formattedRes)
                     setAppointmentList(formattedRes)
                 })
                 .catch(err => console.log(err));
