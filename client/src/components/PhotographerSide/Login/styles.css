@@ -43,3 +43,11 @@
       text-align: center;
       font-weight: bold;
   }
+
+.demo-credentials {
+    background: rgb(208,214,255);
+    background: linear-gradient(143deg, rgba(208,214,255,0.6068802521008403) 0%, rgba(144,175,176,0.23433123249299714) 100%);
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+}

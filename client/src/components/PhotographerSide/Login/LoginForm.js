@@ -43,6 +43,11 @@ export function LoginForm() {
 
     return (
         <div className="LoginForm-wrapper">
+                <div className='demo-credentials'>
+                    <h2>Demo User Credentials</h2>
+                    <p>Username: test@user.com</p>
+                    <p>Password: testuser</p>
+                </div>
             <form onSubmit={handleSubmit} className="login-form-form">
                 <input
                     onChange={(e) => handleChange("email", e.target.value)}
